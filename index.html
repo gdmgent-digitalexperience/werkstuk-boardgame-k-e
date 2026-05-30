@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Area 51 - Startpagina</title>
+    <style>
+        .input-groep {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+        .input-icoon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #cc0000;
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .input-groep input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.6rem;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 2px solid #cc0000;
+            border-radius: 6px;
+            color: #ffffff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.2rem;
+            outline: none;
+        }
+        .input-groep input::placeholder {
+            color: #777777;
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+        }
+        .input-groep input:focus {
+            border-color: #ff4444;
+            background-color: rgba(204, 0, 0, 0.12);
+        }
+        .fout-melding {
+            color: #ff4444;
+            font-family: 'Special Elite', cursive;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .fout-melding.zichtbaar {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <main class="container">
+
+        <header class="logo-sectie">
+            <i class="fa-solid fa-user-secret logo-icoon"></i>
+            <h1 class="titel">AREA 51</h1>
+            <p class="subtitel">Restricted Access</p>
+        </header>
+
+        <section class="formulier-sectie">
+            <p class="instructie">Voer je dossiernummer in om toegang te krijgen</p>
+
+            <div class="input-groep">
+                <i class="fa-solid fa-folder-open input-icoon"></i>
+                <input
+                    type="text"
+                    id="dossiernummer"
+                    placeholder="Dossiernummer..."
+                    maxlength="3"
+                    autocomplete="off"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                >
+            </div>
+            <p class="fout-melding" id="foutMelding">
+                <i class="fa-solid fa-triangle-exclamation"></i> Ongeldig dossiernummer. Toegang geweigerd.
+            </p>
+            <button class="btn-toegang" onclick="controleer()">
+                <i class="fa-solid fa-lock-open"></i> Toegang aanvragen
+            </button>
+        </section>
+
+    </main>
+
+    <footer>
+        <p class="footer-tekst">Area 51 &mdash; Restricted File</p>
+    </footer>
+
+    <script>
+        function controleer() {
+            const invoer = document.getElementById('dossiernummer').value.trim();
+            const fout = document.getElementById('foutMelding');
+
+            if (invoer === '001') {
+                window.location.href = 'overzicht.html';
+            } else {
+                fout.classList.add('zichtbaar');
+                document.getElementById('dossiernummer').style.borderColor = '#ff4444';
+            }
+        }
+
+        document.getElementById('dossiernummer').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') controleer();
+        });
+
+        document.getElementById('dossiernummer').addEventListener('input', function() {
+            document.getElementById('foutMelding').classList.remove('zichtbaar');
+            this.style.borderColor = '#cc0000';
+        });
+    </script>
+
+</body>
+</html>

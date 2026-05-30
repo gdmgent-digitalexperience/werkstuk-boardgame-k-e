@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Area 51 - Ontcijfer de Code</title>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <main class="container">
+
+        <header class="logo-sectie">
+            <i class="fa-solid fa-user-secret logo-icoon"></i>
+            <h1 class="titel">AREA 51</h1>
+            <p class="subtitel">Ontcijfer de Code</p>
+        </header>
+
+        <section class="ontcijfer-sectie">
+            <p class="instructie">Sleep de symbolen in de juiste volgorde en vul het juiste cijfer in.</p>
+
+            <div class="symbolen-lijst" id="symbolen-lijst">
+
+    <div class="symbool-rij" draggable="true" data-symbool="ster">
+        <div class="symbool-icoon">★</div>
+        <span class="symbool-naam">Ster</span>
+        <input type="number" class="cijfer-invoer" min="0" max="9" placeholder="_" data-symbool="ster">
+        <span class="vink cijfer-vink" id="vink-ster"></span>
+    </div>
+
+    <div class="symbool-rij" draggable="true" data-symbool="driehoek">
+        <div class="symbool-icoon">▲</div>
+        <span class="symbool-naam">Driehoek</span>
+        <input type="number" class="cijfer-invoer" min="0" max="9" placeholder="_" data-symbool="driehoek">
+        <span class="vink cijfer-vink" id="vink-driehoek"></span>
+    </div>
+
+    <div class="symbool-rij" draggable="true" data-symbool="cirkel">
+        <div class="symbool-icoon">⬤</div>
+        <span class="symbool-naam">Cirkel</span>
+        <input type="number" class="cijfer-invoer" min="0" max="9" placeholder="_" data-symbool="cirkel">
+        <span class="vink cijfer-vink" id="vink-cirkel"></span>
+    </div>
+
+    <div class="symbool-rij" draggable="true" data-symbool="balk">
+        <div class="symbool-icoon">▬</div>
+        <span class="symbool-naam">Balk</span>
+        <input type="number" class="cijfer-invoer" min="0" max="9" placeholder="_" data-symbool="balk">
+        <span class="vink cijfer-vink" id="vink-balk"></span>
+    </div>
+
+    <div class="symbool-rij" draggable="true" data-symbool="vierkant">
+        <div class="symbool-icoon">■</div>
+        <span class="symbool-naam">Vierkant</span>
+        <input type="number" class="cijfer-invoer" min="0" max="9" placeholder="_" data-symbool="vierkant">
+        <span class="vink cijfer-vink" id="vink-vierkant"></span>
+    </div>
+
+    <div class="symbool-rij" draggable="true" data-symbool="zeshoek">
+        <div class="symbool-icoon">⬡</div>
+        <span class="symbool-naam">Zeshoek</span>
+        <input type="number" class="cijfer-invoer" min="0" max="9" placeholder="_" data-symbool="zeshoek">
+        <span class="vink cijfer-vink" id="vink-zeshoek"></span>
+    </div>
+
+</div>
+
+            <button class="btn-check" id="btn-check">
+                <i class="fa-solid fa-lock-open"></i> Check
+            </button>
+
+            <p class="fout-melding" id="fout-melding"></p>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p class="footer-tekst">Area 51 &mdash; Restricted File</p>
+    </footer>
+
+    <script>
+        // ===========================
+        // JUISTE VOLGORDE & CIJFERS
+        // ===========================
+        const juisteVolgorde = ['cirkel', 'zeshoek', 'vierkant', 'ster', 'balk', 'driehoek'];
+        const juisteCijfers = {
+            cirkel: 9,
+            zeshoek: 6,
+            vierkant: 7,
+            ster: 7,
+            balk: 2,
+            driehoek: 2
+        };
+
+        // ===========================
+        // DRAG & DROP
+        // ===========================
+        const lijst = document.getElementById('symbolen-lijst');
+        let sleepElement = null;
+
+        lijst.addEventListener('dragstart', (e) => {
+            sleepElement = e.target.closest('.symbool-rij');
+            setTimeout(() => sleepElement.classList.add('slepen'), 0);
+        });
+
+        lijst.addEventListener('dragend', (e) => {
+            sleepElement.classList.remove('slepen');
+            sleepElement = null;
+        });
+
+        lijst.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const doel = e.target.closest('.symbool-rij');
+            if (doel && doel !== sleepElement) {
+                const rijen = [...lijst.querySelectorAll('.symbool-rij')];
+                const sleepIndex = rijen.indexOf(sleepElement);
+                const doelIndex = rijen.indexOf(doel);
+                if (sleepIndex < doelIndex) {
+                    lijst.insertBefore(sleepElement, doel.nextSibling);
+                } else {
+                    lijst.insertBefore(sleepElement, doel);
+                }
+            }
+        });
+
+        // ===========================
+        // CIJFER VERIFICATIE (live)
+        // ===========================
+        document.querySelectorAll('.cijfer-invoer').forEach(input => {
+            input.addEventListener('input', () => {
+                const symbool = input.dataset.symbool;
+                const vink = document.getElementById('vink-' + symbool);
+                const ingevoerd = parseInt(input.value);
+                if (input.value === '') {
+                    vink.textContent = '';
+                    vink.className = 'vink cijfer-vink';
+                } else if (ingevoerd === juisteCijfers[symbool]) {
+                    vink.textContent = '✓';
+                    vink.className = 'vink cijfer-vink correct';
+                } else {
+                    vink.textContent = '✗';
+                    vink.className = 'vink cijfer-vink fout';
+                }
+            });
+        });
+
+        // ===========================
+        // CHECK KNOP
+        // ===========================
+        document.getElementById('btn-check').addEventListener('click', () => {
+            const rijen = [...lijst.querySelectorAll('.symbool-rij')];
+            const huidig = rijen.map(r => r.dataset.symbool);
+            const foutMelding = document.getElementById('fout-melding');
+
+            // Volgorde checken
+            const volgorde_ok = JSON.stringify(huidig) === JSON.stringify(juisteVolgorde);
+
+            // Cijfers checken
+            const cijfers_ok = [...document.querySelectorAll('.cijfer-invoer')].every(input => {
+                return parseInt(input.value) === juisteCijfers[input.dataset.symbool];
+            });
+
+            if (volgorde_ok && cijfers_ok) {
+                window.location.href = 'gekraakt.html';
+            } else if (!volgorde_ok) {
+                foutMelding.textContent = '✗ De volgorde van de symbolen is niet correct.';
+                foutMelding.style.color = '#cc0000';
+            } else {
+                foutMelding.textContent = '✗ Een of meerdere cijfers zijn niet correct.';
+                foutMelding.style.color = '#cc0000';
+            }
+        });
+    </script>
+
+</body>
+</html>
