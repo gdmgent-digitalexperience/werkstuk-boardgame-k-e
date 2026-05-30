@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Area 51 - Punt 5</title>
+    <style>
+        .vraag-sectie { background-color: rgba(0,0,0,0.6); border: 1px solid #cc0000; border-radius: 8px; padding: 2rem 1.5rem; width: 100%; max-width: 400px; text-align: center; }
+        .punt-label { font-family: 'Oswald', sans-serif; color: #cc0000; font-size: 0.85rem; letter-spacing: 0.2rem; text-transform: uppercase; margin-bottom: 0.8rem; }
+        .vraag-tekst { font-family: 'Oswald', sans-serif; color: #ffffff; font-size: 1.15rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.4; }
+        .antwoord-lijst { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.5rem; }
+        .antwoord-btn { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1rem; background-color: rgba(255,255,255,0.06); border: 2px solid #555555; border-radius: 6px; color: #cccccc; font-family: 'Special Elite', cursive; font-size: 0.95rem; cursor: pointer; text-align: left; transition: border-color 0.2s, background-color 0.2s; width: 100%; }
+        .antwoord-btn .letter { font-family: 'Oswald', sans-serif; font-size: 1rem; color: #cc0000; font-weight: 700; min-width: 1.2rem; }
+        .antwoord-btn:hover { border-color: #cc0000; background-color: rgba(204,0,0,0.12); }
+        .antwoord-btn.geselecteerd { border-color: #cc0000; background-color: rgba(204,0,0,0.2); color: #ffffff; }
+        .btn-bevestig { width: 100%; padding: 0.9rem; background-color: #cc0000; color: #ffffff; font-family: 'Oswald', sans-serif; font-size: 1rem; letter-spacing: 0.1rem; text-transform: uppercase; border: none; border-radius: 6px; cursor: pointer; }
+        .btn-bevestig:disabled { background-color: #550000; cursor: not-allowed; opacity: 0.6; }
+        .btn-bevestig:not(:disabled):active { background-color: #aa0000; }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <main class="container">
+        <header class="logo-sectie">
+            <i class="fa-solid fa-user-secret logo-icoon"></i>
+            <h1 class="titel">AREA 51</h1>
+            <p class="subtitel">Punt 5 &mdash; Missie Actief</p>
+        </header>
+        <section class="vraag-sectie">
+            <p class="punt-label"> Punt 5</p>
+            <p class="vraag-tekst">Welke geheime testlocatie van Area 51 ligt aan Groom Lake?</p>
+            <div class="antwoord-lijst" id="antwoorden">
+                <button class="antwoord-btn" data-letter="A" onclick="selecteer(this)"><span class="letter">A</span> S-4</button>
+                <button class="antwoord-btn" data-letter="B" onclick="selecteer(this)"><span class="letter">B</span> Echo Base</button>
+                <button class="antwoord-btn" data-letter="C" onclick="selecteer(this)"><span class="letter">C</span> Raven Rock</button>
+                <button class="antwoord-btn" data-letter="D" onclick="selecteer(this)"><span class="letter">D</span> Site Omega</button>
+            </div>
+            <button class="btn-bevestig" id="bevestigBtn" disabled onclick="bevestig()">
+                <i class="fa-solid fa-check"></i> Bevestig antwoord
+            </button>
+        </section>
+    </main>
+    <footer><p class="footer-tekst">Area 51 &mdash; Restricted File</p></footer>
+    <script>
+        const JUIST = 'A';
+        let gekozen = null;
+        function selecteer(btn) {
+            document.querySelectorAll('.antwoord-btn').forEach(b => b.classList.remove('geselecteerd'));
+            btn.classList.add('geselecteerd');
+            gekozen = btn.dataset.letter;
+            document.getElementById('bevestigBtn').disabled = false;
+        }
+        function bevestig() {
+            if (!gekozen) return;
+            window.location.href = gekozen === JUIST ? 'gelukt.html?punt=5&symbool=rechthoek' : 'nietgelukt.html?punt=5';
+        }
+    </script>
+</body>
+</html>
